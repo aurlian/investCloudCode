@@ -1,0 +1,4 @@
+*.ide-wal
+/db.lock
+/storage.ide
+/storage.ide-shm
