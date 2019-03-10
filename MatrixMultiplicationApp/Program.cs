@@ -15,7 +15,7 @@ namespace MatrixMultiplicationApp
             IApiService api = new ApiService();
 
             int rowCount = 1000;
-            
+
             Int32[][] matrixA = new Int32[rowCount][];
             Int32[][] matrixB = new Int32[rowCount][];
 
@@ -23,9 +23,9 @@ namespace MatrixMultiplicationApp
             {
 
                 Boolean initialized = await api.Initialize(rowCount);
-                if(initialized)
+                if (initialized)
                 {
-                    for(int i = 0; i < rowCount; i++)
+                    for (int i = 0; i < rowCount; i++)
                     {
 
                         MatrixRowResponse matrixARow = await api.GetRow('A', i);
@@ -46,7 +46,7 @@ namespace MatrixMultiplicationApp
                     Console.WriteLine(String.Format("Result is validate: {0} ", validated));
 
                 }
-                
+
             });
 
             task.Wait();
@@ -59,18 +59,20 @@ namespace MatrixMultiplicationApp
             int rowCount = matrixA.Length;
             Int32[][] matrixC = new Int32[matrixA.Length][];
 
-            for (int i = 0; i < rowCount; i++)
+            Parallel.For(0, rowCount, i => 
             {
-                matrixC[i] = new Int32[matrixA.Length];
-                for (int j = 0; j < rowCount; j++)
-                {
-                    matrixC[i][j] = 0;
-                    for (int k = 0; k < rowCount; k++)
-                    {
-                        matrixC[i][j] += matrixA[i][k] * matrixB[k][j];
-                    }
-                }
-            }
+               {
+                   matrixC[i] = new Int32[matrixA.Length];
+                   for (int j = 0; j < rowCount; j++)
+                   {
+                       matrixC[i][j] = 0;
+                       for (int k = 0; k < rowCount; k++)
+                       {
+                           matrixC[i][j] += matrixA[i][k] * matrixB[k][j];
+                       }
+                   }
+               }
+           });
 
             return matrixC;
         }
